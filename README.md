@@ -13,6 +13,9 @@ Planet.DEV est une communauté de développeurs qui se réunissent autour de la 
 6. Run php artisan serve  
 7. Go to link localhost:8000  
 
-### Content  
+### Technologies :
+Laravel, PHP, MySQL, API REST, JSON, Documentation API (POSTMAN, OPEN API ou SWAGGER).  
+Authentification avec Laravel via (sanctum, jwt ou bien passport)  
+Framework requise: soit Laravel ou Lumen   
 
 
