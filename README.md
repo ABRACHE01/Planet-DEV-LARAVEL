@@ -5,7 +5,7 @@ Planet.DEV est une communauté de développeurs qui se réunissent autour de la 
 
 ### Installation steps 
 
-1. Run git clone "PROJECT"   
+1. Run git clone https://github.com/medabra/Planet-DEV-LARAVEL.git   
 2. Run composer install   
 3. Run cp .env.example .env   
 4. Run php artisan key:generate    
