@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Article>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
  */
 class ArticleFactory extends Factory
 {
@@ -14,7 +14,7 @@ class ArticleFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
         return [
             //
