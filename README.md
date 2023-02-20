@@ -4,8 +4,12 @@ Planet.DEV | Développer REST API V1 avec Laravel
 Planet.DEV est une communauté de développeurs qui se réunissent autour de la découverte et de l'exploration de l'actualité du développement. 
 
 ### Diagrams (class/ usecase /sequinse)  
-link: 
-https://lucid.app/lucidchart/7ebe20f7-a352-4bbc-a21c-6f7b88e7d6e0/edit?viewport_loc=-401%2C-99%2C3329%2C1401%2CHWEp-vi-RSFO&invitationId=inv_78260070-5919-494d-8372-9b1379470c3f
+link class diagram:   
+https://lucid.app/lucidchart/7ebe20f7-a352-4bbc-a21c-6f7b88e7d6e0/edit?viewport_loc=-401%2C-99%2C3329%2C1401%2CHWEp-vi-RSFO&invitationId=inv_78260070-5919-494d-8372-9b1379470c3f  
+link usecase diagram:  
+https://lucid.app/lucidchart/772b56f6-13c0-4813-83cb-9076bc113489/edit?viewport_loc=-456%2C-22%2C3554%2C1496%2C0_0&invitationId=inv_7b937cf3-f193-4032-9b8a-12be745994aa  
+link sequence diagrame :  
+https://lucid.app/lucidchart/772b56f6-13c0-4813-83cb-9076bc113489/edit?viewport_loc=-456%2C-22%2C3554%2C1496%2C0_0&invitationId=inv_7b937cf3-f193-4032-9b8a-12be745994aa
 ### Installation steps 
 
 1.  git clone https://github.com/medabra/Planet-DEV-LARAVEL.git   
