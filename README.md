@@ -5,12 +5,12 @@ Planet.DEV est une communauté de développeurs qui se réunissent autour de la 
 
 ### Diagrams (class/ usecase /sequinse)  
 
-link usecase diagram:  
-https://lucid.app/lucidchart/18c4975f-4da5-470c-baae-7c09d0c782a0/edit?viewport_loc=-764%2C78%2C3461%2C1457%2C.Q4MUjXso07N&invitationId=inv_5bb9831b-0a9e-4ef5-9e69-b2e6c67d7396 
-link sequence diagrame :  
-https://lucid.app/lucidchart/772b56f6-13c0-4813-83cb-9076bc113489/edit?viewport_loc=-456%2C-22%2C3554%2C1496%2C0_0&invitationId=inv_7b937cf3-f193-4032-9b8a-12be745994aa  
-link class diagram:   
-https://lucid.app/lucidchart/7ebe20f7-a352-4bbc-a21c-6f7b88e7d6e0/edit?viewport_loc=-401%2C-99%2C3329%2C1401%2CHWEp-vi-RSFO&invitationId=inv_78260070-5919-494d-8372-9b1379470c3f  
+link usecase diagram:    
+https://lucid.app/lucidchart/18c4975f-4da5-470c-baae-7c09d0c782a0/edit?viewport_loc=-764%2C78%2C3461%2C1457%2C.Q4MUjXso07N&invitationId=inv_5bb9831b-0a9e-4ef5-9e69-b2e6c67d7396   
+link sequence diagrame :    
+https://lucid.app/lucidchart/772b56f6-13c0-4813-83cb-9076bc113489/edit?viewport_loc=-456%2C-22%2C3554%2C1496%2C0_0&invitationId=inv_7b937cf3-f193-4032-9b8a-12be745994aa    
+link class diagram:     
+https://lucid.app/lucidchart/7ebe20f7-a352-4bbc-a21c-6f7b88e7d6e0/edit?viewport_loc=-401%2C-99%2C3329%2C1401%2CHWEp-vi-RSFO&invitationId=inv_78260070-5919-494d-8372-9b1379470c3f    
 ### Installation steps 
 
 1.  git clone https://github.com/medabra/Planet-DEV-LARAVEL.git   
