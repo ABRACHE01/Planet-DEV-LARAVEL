@@ -1,8 +1,11 @@
 # Planet-DEV-LARAVEL  
 Planet.DEV | Développer REST API V1 avec Laravel  
 ### Description 
-Planet.DEV est une communauté de développeurs qui se réunissent autour de la découverte et de l'exploration de l'actualité du développement.
+Planet.DEV est une communauté de développeurs qui se réunissent autour de la découverte et de l'exploration de l'actualité du développement. 
 
+### Diagrams (class/ usecase /sequinse)  
+link: 
+https://lucid.app/lucidchart/7ebe20f7-a352-4bbc-a21c-6f7b88e7d6e0/edit?viewport_loc=-401%2C-99%2C3329%2C1401%2CHWEp-vi-RSFO&invitationId=inv_78260070-5919-494d-8372-9b1379470c3f
 ### Installation steps 
 
 1.  git clone https://github.com/medabra/Planet-DEV-LARAVEL.git   
