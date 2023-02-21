@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Tag;
+use App\Models\Article;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,7 @@ class TagFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => fake()->word,
         ];
     }
 }
