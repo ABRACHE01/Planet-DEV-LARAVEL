@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Article extends Model
 {
     use HasFactory;
-    protected   $fillable = [
+    protected $fillable = [
         'title',
         'image',
         'description',
         'content',
         'user_id',
         'category_id',
-                ];
+    ];
 
     public function user()
     {
