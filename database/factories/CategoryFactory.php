@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,8 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => fake()->word,
         ];
     }
+
 }
