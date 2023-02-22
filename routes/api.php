@@ -1,8 +1,9 @@
 <?php
-
+use Illuminate\Auth\Events\Verified;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,7 +20,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout')->middleware('auth');
     Route::post('reset', 'reset');
+    Route::get('/email/verify/{id}/{hash}', 'verify')
+    ->name('verification.verify');
 });
+
+
+// Route::post('/register', [AuthController::class ,'register']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

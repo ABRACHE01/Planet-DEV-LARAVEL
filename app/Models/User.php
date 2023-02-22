@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Article;
 use App\Models\Comment;
@@ -44,7 +46,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-  
+    public function sendConfirmationEmail()
+    {
+        $this->confirmation_code = Str::random(30);
+        $this->save();
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $this->id, 'hash' => sha1($this->confirmation_code)]
+        );
+
+        $this->notify(new VerifyEmail($verificationUrl));
+    }
+
      
     public function comments()
     {
