@@ -49,5 +49,25 @@ class CategoryController extends Controller
             'message' => 'Category deleted successfully'
         ]);
     }
+   
+    //filter postes by category id
 
+    public function sortcategory(Request $request) {
+        $categoryId = $request->query('category_id');
+        $sortBy = 'category_id';
+        $sortOrder = 'asc';
+    
+        $category = Category::find($categoryId);
+        if (!$category) {
+            return response()->json([
+                'error' => 'Category not found'
+            ], 404);
+        }
+    
+        $articles = $category->articles()->orderBy($sortBy, $sortOrder)->get();
+    
+        return response()->json([
+            'data' => $articles
+        ]);
+    }
 }

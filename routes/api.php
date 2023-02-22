@@ -26,6 +26,9 @@ Route::controller(AuthController::class)->group(function () {
     ->name('verification.verify');
 });
 
+
+
+Route::get('sortcategory',[categoryController::class,'sortcategory'] );
 //category crud routes
 Route::apiresource('categories', categoryController::class);
 Route::apiResource('articles', ArticleController::class);
