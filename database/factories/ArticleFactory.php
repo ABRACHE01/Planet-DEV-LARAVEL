@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
-use Faker\Generator as Faker;
+use App\Models\Comment;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ArticleFactory extends Factory
@@ -16,14 +18,20 @@ class ArticleFactory extends Factory
         $faker = \Faker\Factory::create();
 
         return [
-            'title' => $faker->word(),
-            'image' => $faker->imageUrl(640, 480, 'animals', true),
-            'description' => $faker->sentence(20),
-            'content' => $faker->paragraph(2),
-            // 'user_id' => $faker->numberBetween(1, 10),
-            'category_id' => $faker->numberBetween(1, 10),
+            'title' => fake()->sentence,
+            'content' => fake()->paragraphs(3, true),
+            'description' => fake()->paragraphs(3, true),
+            'image' => fake()->imageUrl(),
             'user_id' => User::factory(),
-
+            'category_id' => Category::factory(),
         ];
     }
+    public function configure()
+    {
+        return $this->afterCreating(function (Article $article) {
+            $tags = Tag::factory()->count(3)->create();
+            $article->tags()->attach($tags);
+        });
+    }
+
 }
