@@ -1,9 +1,10 @@
 <?php
-use Illuminate\Auth\Events\Verified;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ArticleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,8 +25,7 @@ Route::controller(AuthController::class)->group(function () {
     ->name('verification.verify');
 });
 
-
-// Route::post('/register', [AuthController::class ,'register']);
+Route::apiResource('articles', ArticleController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
