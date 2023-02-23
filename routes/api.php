@@ -1,9 +1,10 @@
 <?php
-use Illuminate\Auth\Events\Verified;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/email/verify/{id}/{hash}', 'verify')
     ->name('verification.verify');
 });
+//comment crud apiresources
+Route::apiResource('comments', CommentController::class);
 
 
 // Route::post('/register', [AuthController::class ,'register']);
