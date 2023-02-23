@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\ArticleResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ArticleCollection extends ResourceCollection
@@ -12,8 +13,15 @@ class ArticleCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+    public $collects = ArticleResource::class;
+
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'links' => [
+                'self' => url('/articles'),
+            ],
+        ];
     }
 }

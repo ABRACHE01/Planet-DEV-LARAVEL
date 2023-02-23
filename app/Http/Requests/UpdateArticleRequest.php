@@ -27,7 +27,9 @@ class UpdateArticleRequest extends FormRequest
             'title'=>'required',
             'content'=>'required',
             'description'=>'required',
-            'category_id'=>'required'
+            'category_id'=>'required',
+            'tags' => 'required|array',
+            'tags.*' => 'exists:tags,id',
         ];
     }
 }
