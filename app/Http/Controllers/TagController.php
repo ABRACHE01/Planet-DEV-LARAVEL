@@ -8,6 +8,13 @@ use App\Http\Requests\UpdateTagRequest;
 
 class TagController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('IsAdmin');
+        $this->middleware('IsAuthor');
+    }
     /**
      * Display a listing of the resource.
      *
