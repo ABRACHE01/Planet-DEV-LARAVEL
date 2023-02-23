@@ -17,7 +17,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-       $articles =  Article::with('category','tags')->latest()->paginate(6);
+       $articles =  Article::with('category','tags')->latest()->get();
        return  new ArticleCollection($articles);
     }
 
@@ -51,9 +51,9 @@ class ArticleController extends Controller
             'user_id'=>1,  
             // Auth::user()->id
         ]);
+        $tags = $request->input('tags',[]);
+        $article->tags()->attach($tags);
         return new ArticleResource($article);
-
-        
     }
 
     /**
@@ -105,6 +105,8 @@ class ArticleController extends Controller
         $article->content = $request->content;
         $article->category_id = $request->category_id;
         $article->update();
+        $tags = $request->input('tags',[]);
+        $article->tags()->sync($tags);
         return new ArticleResource($article); 
 
 
