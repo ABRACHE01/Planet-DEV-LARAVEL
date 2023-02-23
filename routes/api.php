@@ -33,6 +33,6 @@ Route::get('sortcategory',[categoryController::class,'sortcategory'] );
 Route::apiresource('categories', categoryController::class);
 Route::apiResource('articles', ArticleController::class);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request){
     return $request->user();
 });

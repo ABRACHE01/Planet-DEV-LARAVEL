@@ -17,7 +17,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-       $articles =  Article::with('category','tags')->latest()->get();
+       $articles =  Article::with('category','tags','comments')->latest()->get();
        return  new ArticleCollection($articles);
     }
 
@@ -64,7 +64,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        $article =  Article::with('category','tags')->where('id',$article->id)->get();
+        $article =  Article::with('category','tags','comments')->where('id',$article->id)->get();
         return  new ArticleCollection($article);
     }
 
@@ -88,6 +88,9 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
+        if($article->user_id!=1){
+            return  response()->json(["error"=>'You Dont have permission to make action on it'], 404);
+        }
         if ($request->hasFile('image')) {
             // delete old image
             $oldImage = public_path('images/').$article->image;
@@ -120,6 +123,10 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {  
+        if($article->user_id!=1){
+            return  response()->json(["error"=>'You Dont have permission to make action on this article'], 404);
+        }
+        $article = Article::find($article->id)->where('user_id',1);
         $article->delete();
         return  response()->json(['success'=>'article deleted successufuly']);
     }
