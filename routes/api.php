@@ -26,8 +26,11 @@ Route::controller(AuthController::class)->group(function () {
     ->name('verification.verify');
 });
 
+
+
+Route::get('sortcategory',[categoryController::class,'sortcategory'] );
 //category crud routes
-Route::resource('categories', categoryController::class);
+Route::apiresource('categories', categoryController::class);
 Route::apiResource('articles', ArticleController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
