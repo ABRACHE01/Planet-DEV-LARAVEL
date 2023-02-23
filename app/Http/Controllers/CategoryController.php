@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
         $this->middleware('auth:sanctum');
         $this->middleware('IsAuthor');
-        $this->middleware('IsAdmin');
+        $this->middleware('IsAdmin')->except(['index','store','update','destroy','show','sortcategory']);
     }
 
     public function index()
@@ -33,6 +33,7 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
+    
     public function show(Category $category)
     {
         return new CategoryResource($category);

@@ -15,7 +15,7 @@ class ArticleController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('IsAdmin');
+        $this->middleware('IsAdmin')->except(['index','store','show','update','destroy']);
         $this->middleware('IsAuthor');
     }
 
