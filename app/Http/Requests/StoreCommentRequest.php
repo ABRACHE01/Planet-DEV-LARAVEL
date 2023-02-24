@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Mail\Mailables\Content;
 
 class StoreCommentRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreCommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,11 @@ class StoreCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            
+            "content"=>"required|string|min:3|max:255",
+            "user_id"=>"required|integer|exists:users,id",
+            "article_id"=>"required|integer|exists:articles,id",
+
         ];
     }
 }
