@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Events\Registered; 
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     

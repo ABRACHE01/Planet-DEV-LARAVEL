@@ -17,7 +17,11 @@ class IsAuthor
     public function handle(Request $request, Closure $next)
     {
         // return $next($request);
-        
+        if (!Auth::user()) {
+            return response()->json([
+                'error' => 'unothontifed' ]);
+            
+        }
         if (Auth::user()->role->name =='author') {
             return $next($request);
         } else {
