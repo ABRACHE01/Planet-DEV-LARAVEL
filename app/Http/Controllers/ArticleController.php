@@ -3,11 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Http\Resources\ArticleResource;
+use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 
+
+
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('IsAdmin')->except(['index','store','show','update','destroy']);
+        $this->middleware('IsAuthor');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +26,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+       $articles =  Article::with('category','tags','comments')->latest()->get();
+       return  new ArticleCollection($articles);
     }
 
     /**
@@ -25,7 +37,6 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -36,7 +47,22 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        //
+        $image = $request->file('image');
+        $image_name = time().'.'.$image->getClientOriginalExtension();
+        $destinationPath = public_path('/images');
+        $image->move($destinationPath, $image_name);
+        $article = Article::create([
+            'title'=>$request->title,
+            'description'=>$request->description,
+            'content'=>$request->content,
+            'image'=>$image_name,
+            'category_id'=>$request->category_id,
+            'user_id'=>1,  
+            // Auth::user()->id
+        ]);
+        $tags = $request->input('tags',[]);
+        $article->tags()->attach($tags);
+        return new ArticleResource($article);
     }
 
     /**
@@ -47,7 +73,8 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        $article =  Article::with('category','tags','comments')->where('id',$article->id)->get();
+        return  new ArticleCollection($article);
     }
 
     /**
@@ -58,7 +85,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        ///
     }
 
     /**
@@ -70,7 +97,31 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-        //
+        if($article->user_id!=1){
+            return  response()->json(["error"=>'You Dont have permission to make action on it'], 404);
+        }
+        if ($request->hasFile('image')) {
+            // delete old image
+            $oldImage = public_path('images/').$article->image;
+            if (file_exists($oldImage)) {
+                unlink($oldImage);
+            }
+            // upload new image
+            $image = $request->file('image');
+            $imageName = time().'-'.$image->getClientOriginalName();
+            $image->move(public_path('images/'), $imageName);
+            $article->image = $imageName;
+        }
+        $article->title = $request->title;
+        $article->description = $request->description;
+        $article->content = $request->content;
+        $article->category_id = $request->category_id;
+        $article->update();
+        $tags = $request->input('tags',[]);
+        $article->tags()->sync($tags);
+        return new ArticleResource($article); 
+
+
     }
 
     /**
@@ -80,7 +131,12 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Article $article)
-    {
-        //
+    {  
+        if($article->user_id!=1){
+            return  response()->json(["error"=>'You Dont have permission to make action on this article'], 404);
+        }
+        $article = Article::find($article->id)->where('user_id',1);
+        $article->delete();
+        return  response()->json(['success'=>'article deleted successufuly']);
     }
 }

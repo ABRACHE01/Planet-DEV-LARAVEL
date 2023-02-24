@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Database\Seeders\TagSeeder;
 use Illuminate\Database\Seeder;
+use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\ArticleSeeder;
 use Database\Seeders\CommentSeeder;
@@ -20,11 +21,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            RoleSeeder::class,
             UserSeeder::class,
             TagSeeder::class,
             CommentSeeder::class,
             CategorySeeder::class,
             ArticleSeeder::class,
+
         ]);
     }
 }
