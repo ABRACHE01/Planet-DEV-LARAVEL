@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Http\Resources\TagResource;
+use App\Http\Resources\TagCollection;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 
 class TagController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('IsAdmin')->except(['index','store','update','destroy','show']);
-        $this->middleware('IsAuthor');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    //     $this->middleware('IsAdmin')->except(['index','store','update','destroy','show']);
+    //     $this->middleware('IsAuthor');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +24,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::all();
+        return new TagCollection($tags);
     }
 
     /**
@@ -43,7 +46,15 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|unique:tags,name'
+        ]);
+
+        $tags = Tag::create([
+            'name' => $request->name
+        ]);
+
+        return new TagResource($tags);
     }
 
     /**
@@ -54,7 +65,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        return new TagResource($tag);
     }
 
     /**
@@ -77,7 +88,15 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|unique:tags,name'
+        ]);
+
+        $tag->update([
+            'name' => $request->name
+        ]);
+
+        return new TagResource($tag);
     }
 
     /**
@@ -88,6 +107,25 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return response()->json([
+            'message' => 'the tag has been deleted'
+        ]);
     }
+
+    public function SortByTag($tag_id){
+
+        $tag = Tag::with('articles')->where('id', $tag_id)->first();
+
+        if(!$tag){
+            return response()->json([
+                'error' => 'Tag not found!'
+            ], 404);
+        }
+
+        return response()->json([
+            'articles' => $tag->articles
+        ], 200);
+    }
+
 }
