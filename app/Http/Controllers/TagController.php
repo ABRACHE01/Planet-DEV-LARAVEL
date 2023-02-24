@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Http\Resources\TagResource;
+use App\Http\Resources\TagCollection;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 
@@ -15,7 +17,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::all();
+        return new TagCollection($tags);
     }
 
     /**
@@ -36,7 +39,15 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $tags = Tag::create([
+            'name' => $request->name
+        ]);
+
+        return new TagResource($tags);
     }
 
     /**
@@ -47,7 +58,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        return new TagResource($tag);
     }
 
     /**
@@ -70,7 +81,15 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $tag->update([
+            'name' => $request->name
+        ]);
+
+        return new TagResource($tag);
     }
 
     /**
@@ -81,6 +100,18 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return response()->json([
+            'message' => 'the tag has been deleted'
+        ]);
+    }
+
+    public function filterByTag(Tag $tag){
+        /*
+            1-get the ids of the article that have the $tag
+            2-go to table of the articles and get the articles with ids from the previous step
+        */
+        $articles = $tag->articles();
+        return response()->json($articles);
     }
 }
