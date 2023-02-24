@@ -12,9 +12,8 @@ class CommentController extends Controller
 
      public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('IsAdmin')->except(['index','store','update','destroy','show']);
-        $this->middleware('IsAuthor');
+        $this->middleware('auth:sanctum');
+        $this->middleware('IsAdmin')->only(['index','update','destroy']);
     }
     /**
      * Display a listing of the resource.
