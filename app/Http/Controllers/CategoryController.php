@@ -63,7 +63,9 @@ class CategoryController extends Controller
     //filter postes by category id
 
     public function sortcategory(Request $request) {
+
         $categoryId = $request->query('category_id');
+
         $sortBy = 'category_id';
         $sortOrder = 'asc';
     
