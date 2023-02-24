@@ -10,7 +10,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only('index');
+        $this->middleware('auth:sanctum');
 
         $this->middleware('IsAuthor');
         $this->middleware('IsAdmin');
