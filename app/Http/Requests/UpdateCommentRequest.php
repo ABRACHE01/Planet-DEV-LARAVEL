@@ -13,7 +13,7 @@ class UpdateCommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "content" => "required|string|min:3|max:255",
+            
         ];
     }
 }

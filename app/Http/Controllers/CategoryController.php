@@ -10,9 +10,10 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum')->only('index');
+
         $this->middleware('IsAuthor');
-        $this->middleware('IsAdmin')->except(['index','store','update','destroy','show','sortcategory']);
+        $this->middleware('IsAdmin');
     }
 
     public function index()
