@@ -14,6 +14,7 @@ class CommentController extends Controller
     {
         $this->middleware('auth:sanctum');
         $this->middleware('IsAdmin')->only(['index','update','destroy']);
+
     }
     /**
      * Display a listing of the resource.
