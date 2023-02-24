@@ -11,12 +11,12 @@ use App\Http\Requests\UpdateTagRequest;
 class TagController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('IsAdmin')->except(['index','store','update','destroy','show']);
-        $this->middleware('IsAuthor');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    //     $this->middleware('IsAdmin')->except(['index','store','update','destroy','show']);
+    //     $this->middleware('IsAuthor');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -113,12 +113,19 @@ class TagController extends Controller
         ]);
     }
 
-    public function filterByTag(Tag $tag){
-        /*
-            1-get the ids of the article that have the $tag
-            2-go to table of the articles and get the articles with ids from the previous step
-        */
-        $articles = $tag->articles();
-        return response()->json($articles);
+    public function SortByTag($tag_id){
+
+        $tag = Tag::with('articles')->where('id', $tag_id)->first();
+
+        if(!$tag){
+            return response()->json([
+                'error' => 'Tag not found!'
+            ], 404);
+        }
+
+        return response()->json([
+            'articles' => $tag->articles
+        ], 200);
     }
+
 }
