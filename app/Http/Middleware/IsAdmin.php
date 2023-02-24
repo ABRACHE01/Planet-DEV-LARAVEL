@@ -20,7 +20,7 @@ class IsAdmin
     {
        
 
-        if (Auth::user()->role->name != 'admin') {
+        if (Auth::user()->role->name == 'admin') {
             return $next($request);
         } else {
             return response()->json([
