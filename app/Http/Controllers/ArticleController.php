@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
@@ -14,11 +15,10 @@ class ArticleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('IsAdmin')->except(['index','store','show','update','destroy']);
-        $this->middleware('IsAuthor');
+        $this->middleware('auth:sanctum')->only(['store','update','destroy']);
+        $this->middleware('IsAuthor')->only(['store']);
+        $this->middleware('isAdminAuthor')->only(['update','destroy']);
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +29,6 @@ class ArticleController extends Controller
        $articles =  Article::with('category','tags','comments')->latest()->get();
        return  new ArticleCollection($articles);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -38,7 +37,6 @@ class ArticleController extends Controller
     public function create()
     {
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -64,7 +62,6 @@ class ArticleController extends Controller
         $article->tags()->attach($tags);
         return new ArticleResource($article);
     }
-
     /**
      * Display the specified resource.
      *
@@ -76,7 +73,6 @@ class ArticleController extends Controller
         $article =  Article::with('category','tags','comments')->where('id',$article->id)->get();
         return  new ArticleCollection($article);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -87,7 +83,6 @@ class ArticleController extends Controller
     {
         ///
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -97,7 +92,7 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-        if($article->user_id!=1){
+        if($article->user_id!=1 && Auth::user()->role->name!="admin"){
             return  response()->json(["error"=>'You Dont have permission to make action on it'], 404);
         }
         if ($request->hasFile('image')) {
@@ -120,8 +115,6 @@ class ArticleController extends Controller
         $tags = $request->input('tags',[]);
         $article->tags()->sync($tags);
         return new ArticleResource($article); 
-
-
     }
 
     /**
@@ -132,7 +125,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {  
-        if($article->user_id!=1){
+        if($article->user_id!=1 && Auth::user()->role->name!="admin"){
             return  response()->json(["error"=>'You Dont have permission to make action on this article'], 404);
         }
         $article = Article::find($article->id)->where('user_id',1);
