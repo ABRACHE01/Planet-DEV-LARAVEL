@@ -7,6 +7,15 @@ use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only('index');
+
+        $this->middleware('IsAuthor');
+        $this->middleware('IsAdmin');
+    }
+
     public function index()
     {
         $categories = Category::all();
@@ -25,6 +34,7 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
+    
     public function show(Category $category)
     {
         return new CategoryResource($category);

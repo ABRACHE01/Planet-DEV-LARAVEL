@@ -8,6 +8,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Events\Registered; 
+use App\Models\Role;
 class AuthController extends Controller
 {
     
@@ -48,17 +49,21 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed'
         ]);
-
-        $user = User::create([
+    
+        $role = Role::find(1);
+    
+        $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        $user->role()->associate($role);
+        $user->save();
+    
         event(new Registered($user));
-
+    
         $user->sendConfirmationEmail();
-
+    
         return response()->json([
             'message' => 'User registered successfully. Please check your email for confirmation.'
         ], 201);

@@ -3,9 +3,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,6 +18,7 @@ use App\Http\Controllers\ArticleController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 //authentication Routes:
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -25,6 +28,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/email/verify/{id}/{hash}', 'verify')
     ->name('verification.verify');
 });
+//comment crud apiresources
+Route::apiResource('comments', CommentController::class);
 
 
 
@@ -42,3 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request){
     return $request->user();
 });
+
+
+// Tags routes
+Route::apiResource('tags', TagController::class);
+Route::get('SortByTag/{tag_id}', [TagController::class, 'SortByTag']);
