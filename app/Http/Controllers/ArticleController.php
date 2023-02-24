@@ -8,8 +8,17 @@ use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 
+
+
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('IsAdmin')->except(['index','store','show','update','destroy']);
+        $this->middleware('IsAuthor');
+    }
+
     /**
      * Display a listing of the resource.
      *
