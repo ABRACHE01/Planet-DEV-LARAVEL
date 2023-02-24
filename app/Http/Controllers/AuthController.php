@@ -85,7 +85,6 @@ class AuthController extends Controller
           'message'=> 'confirmed successfully'
        ]) ;
     }
-
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->id);
@@ -101,48 +100,7 @@ class AuthController extends Controller
         }
 
     }
-
-    public function forgot(Request $request){
-        $exist = $request->validate([
-            'email' => 'required|email|exists:users'
-        ]);
-
-        if($exist){
-            $user = User::where('email', $request->email)->first();
-
-            if($user->email_verified_at == NULL){
-
-                $user->sendConfirmationEmail();
-
-                return response()->json([
-                    'Error' => 'Go verify your email'
-                ]);
-            }
-
-            $token = Str::random(64);
-
-            $insert = DB::table('password_resets')->insert([
-                'email' => $request->email,
-                'token' => $token,
-                'created_at' => Carbon::now()
-            ]);
-
-            if($insert){
-                Mail::send('email.reset', ['token'=> $token], function($message) use($request){
-                    $message->to($request->email);
-                    $message->subject('Reset your password');
-                });
-
-                return response()->json([
-                    'success' => 'we have emailed you with reset password link'
-                ]);
-            }
-        }else{
-            return response()->json([
-                'Error' => 'Your email does not exist'
-            ]);
-        }
-
+    public function reset(){
 
     }
 
@@ -177,5 +135,7 @@ class AuthController extends Controller
 
     public function logout(){
 
+        Auth::logout();
+        return response()->json(['success'=>'you have loged out']);
     }
 }
