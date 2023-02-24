@@ -18,7 +18,7 @@ class IsAuthor
     {
         // return $next($request);
         
-        if (Auth::user()->role->name !='author') {
+        if (Auth::user()->role->name =='author') {
             return $next($request);
         } else {
             return response()->json([
