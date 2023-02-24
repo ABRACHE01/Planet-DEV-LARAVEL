@@ -50,7 +50,7 @@ class AuthController extends Controller
             'password' => 'required|min:8|confirmed'
         ]);
     
-        $role = Role::find(2);
+        $role = Role::find(1);
     
         $user = new User([
             'name' => $request->name,

@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/email/verify/{id}/{hash}', 'verify')
     ->name('verification.verify');
 });
+//comment crud apiresources
+Route::apiResource('comments', CommentController::class);
 
 
 
