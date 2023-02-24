@@ -100,9 +100,6 @@ class AuthController extends Controller
         }
 
     }
-    public function reset(){
-
-    }
 
     public function reset($token, Request $request){
         $request->validate([
@@ -136,6 +133,6 @@ class AuthController extends Controller
     public function logout(){
 
         Auth::logout();
-        return response()->json(['success'=>'you have loged out']);
+        return response()->json(['success'=>'you have logged out']);
     }
 }
