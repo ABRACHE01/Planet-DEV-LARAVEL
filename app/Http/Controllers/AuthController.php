@@ -17,8 +17,6 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-
-
     public function login(Request $request){
         // return response()->json(['message'=>'ok']);
         $request->validate([

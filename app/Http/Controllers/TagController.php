@@ -14,7 +14,7 @@ class TagController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
-        $this->middleware('IsAdmin')->only(['index','store','update','destroy','show']);
+        $this->middleware('IsAdmin')->only(['index','store','update','destroy','show', 'SortByTag']);
     }
     /**
      * Display a listing of the resource.
