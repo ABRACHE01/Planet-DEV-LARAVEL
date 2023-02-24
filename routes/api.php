@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\categoryController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +30,12 @@ Route::controller(AuthController::class)->group(function () {
 Route::apiResource('comments', CommentController::class);
 
 
-// Route::post('/register', [AuthController::class ,'register']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::get('sortcategory',[categoryController::class,'sortcategory'] );
+//category crud routes
+Route::apiresource('categories', categoryController::class);
+Route::apiResource('articles', ArticleController::class);
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request){
     return $request->user();
 });
