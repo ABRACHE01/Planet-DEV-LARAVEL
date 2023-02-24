@@ -33,6 +33,12 @@ Route::get('sortcategory',[categoryController::class,'sortcategory'] );
 Route::apiresource('categories', categoryController::class);
 Route::apiResource('articles', ArticleController::class);
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('user/updatePassword',[UserController::class,'updatePassword']);
+    Route::put('user/updateName',[UserController::class,'updateName']);
+    Route::put('user/updateEmail',[UserController::class,'updateEmail']);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request){
     return $request->user();
 });

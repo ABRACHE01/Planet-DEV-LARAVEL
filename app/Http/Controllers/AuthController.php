@@ -74,7 +74,6 @@ class AuthController extends Controller
           'message'=> 'confirmed succsefully'
        ]) ;
     }
-
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->id);
@@ -84,18 +83,15 @@ class AuthController extends Controller
                 'message'=> 'confirmed succsefully'
              ]) ;
         }
-    
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
-    
     }
-        
-
     public function reset(){
         
     }
     public function logout(){
-        
+        Auth::logout();
+        return response()->json(['success'=>'you have loged out']);
     }
 }
