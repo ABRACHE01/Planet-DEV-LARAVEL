@@ -47,7 +47,7 @@ class TagController extends Controller
     public function store(StoreTagRequest $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|string|unique:tags,name'
         ]);
 
         $tags = Tag::create([
@@ -89,7 +89,7 @@ class TagController extends Controller
     public function update(UpdateTagRequest $request, Tag $tag)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|string|unique:tags,name'
         ]);
 
         $tag->update([
