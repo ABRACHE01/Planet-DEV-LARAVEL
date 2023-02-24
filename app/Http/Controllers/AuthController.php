@@ -1,18 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Auth\Events\Registered; 
-use App\Models\Role;
+
 class AuthController extends Controller
 {
-    
-    
+
+
     public function login(Request $request){
         // return response()->json(['message'=>'ok']);
         $request->validate([
@@ -30,16 +36,16 @@ class AuthController extends Controller
             if (!$user) {
                 throw ValidationException::withMessages([
                     'email' => ['The provided email is incorrect.']
-                ]);  
+                ]);
             }elseif(!Hash::check($request->password, $user->password)) {
                 throw ValidationException::withMessages([
                     'password' => ['The provided password is incorrect.']
                 ]);
-               
+
             }
         }
 
-        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]); 
+        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]);
     }
 
     public function register(Request $request)
@@ -49,9 +55,9 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed'
         ]);
-    
+
         $role = Role::find(1);
-    
+
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
@@ -59,11 +65,11 @@ class AuthController extends Controller
         ]);
         $user->role()->associate($role);
         $user->save();
-    
+
         event(new Registered($user));
-    
+
         $user->sendConfirmationEmail();
-    
+
         return response()->json([
             'message' => 'User registered successfully. Please check your email for confirmation.'
         ], 201);
@@ -76,31 +82,100 @@ class AuthController extends Controller
         $user->confirmEmail();
 
         return Response()->json([
-          'message'=> 'confirmed succsefully'
+          'message'=> 'confirmed successfully'
        ]) ;
     }
 
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->id);
-    
+
         if ($user->email_verified_at) {
             return Response()->json([
-                'message'=> 'confirmed succsefully'
+                'message'=> 'confirmed successfully'
              ]) ;
         }
-    
+
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
-    
-    }
-        
 
-    public function reset(){
-        
     }
+
+    public function forgot(Request $request){
+        $exist = $request->validate([
+            'email' => 'required|email|exists:users'
+        ]);
+
+        if($exist){
+            $user = User::where('email', $request->email)->first();
+
+            if($user->email_verified_at == NULL){
+
+                $user->sendConfirmationEmail();
+
+                return response()->json([
+                    'Error' => 'Go verify your email'
+                ]);
+            }
+
+            $token = Str::random(64);
+
+            $insert = DB::table('password_resets')->insert([
+                'email' => $request->email,
+                'token' => $token,
+                'created_at' => Carbon::now()
+            ]);
+
+            if($insert){
+                Mail::send('email.reset', ['token'=> $token], function($message) use($request){
+                    $message->to($request->email);
+                    $message->subject('Reset your password');
+                });
+
+                return response()->json([
+                    'success' => 'we have emailed you with reset password link'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'Error' => 'Your email does not exist'
+            ]);
+        }
+
+
+    }
+
+    public function reset($token, Request $request){
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed'
+        ]);
+
+        $validateToken = DB::table('password_resets')->where([
+            'token' => $token,
+            'email' => $request->email
+        ])->first();
+
+        if(!$validateToken){
+            return response()->json([
+                'Error' => 'Invalid Token'
+            ]);
+        }
+
+        $user = User::where('email', $request->email)
+        ->update(['password' => Hash::make($request->password)]);
+
+        if($user){
+            DB::table('password_resets')->where(['email'=> $request->email])->delete();
+
+            return response()->json([
+                'Success' => 'password updated successfully'
+            ]);
+        }
+    }
+
     public function logout(){
-        
+
     }
 }
