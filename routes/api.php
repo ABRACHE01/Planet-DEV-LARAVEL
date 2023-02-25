@@ -26,7 +26,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout')->middleware('auth');
     Route::post('forgot', 'forgot');
-    Route::post('reset/{token}', 'reset')->name('reset.password.post');
+    Route::put('reset/{token}', 'reset')->name('reset.password.post');
     Route::get('/email/verify/{id}/{hash}', 'verify')
     ->name('verification.verify');
 });
@@ -54,8 +54,9 @@ Route::apiResource('tags', TagController::class);
 Route::get('SortByTag/{tag_id}', [TagController::class, 'SortByTag']);
 
 
-// Route::middleware()->group(function () {
+Route::middleware('IsAdmin')->group(function () {
     Route::get('users' , [UserController::class,'users']);
     Route::put('admin/switch-role/{id}' ,[UserController::class,'switchRole']);
     Route::get('user/{id}', [UserController::class,'showOneUser']);
-// });
+ });
+

@@ -13,8 +13,7 @@ class TagController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
-        $this->middleware('IsAdmin')->only(['index','store','update','destroy','show', 'SortByTag']);
+        $this->middleware('IsAdmin')->only(['store','update','destroy']);
     }
     /**
      * Display a listing of the resource.
@@ -112,7 +111,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function SortByTag($tag_id){
+    public function FilterByTag($tag_id){
 
         $tag = Tag::with('articles')->where('id', $tag_id)->first();
 

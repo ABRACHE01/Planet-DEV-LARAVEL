@@ -31,7 +31,7 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    
+
     public function show(Category $category)
     {
         return new CategoryResource($category);
@@ -47,7 +47,7 @@ class CategoryController extends Controller
 
         return new CategoryResource($category);
     }
-
+    
     public function destroy(Category $category)
     {
         $category->delete();
@@ -56,7 +56,7 @@ class CategoryController extends Controller
             'message' => 'Category deleted successfully'
         ]);
     }
-   
+
     //filter postes by category id
 
     public function sortcategory(Request $request) {
@@ -65,16 +65,16 @@ class CategoryController extends Controller
 
         $sortBy = 'category_id';
         $sortOrder = 'asc';
-    
+
         $category = Category::find($categoryId);
         if (!$category) {
             return response()->json([
                 'error' => 'Category not found'
             ], 404);
         }
-    
+
         $articles = $category->articles()->orderBy($sortBy, $sortOrder)->get();
-    
+
         return response()->json([
             'data' => $articles
         ]);
