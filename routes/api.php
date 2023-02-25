@@ -40,16 +40,21 @@ Route::apiresource('categories', categoryController::class);
 Route::apiResource('articles', ArticleController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('user',[UserController::class,'user']);
     Route::put('user/updatePassword',[UserController::class,'updatePassword']);
     Route::put('user/updateName',[UserController::class,'updateName']);
     Route::put('user/updateEmail',[UserController::class,'updateEmail']);
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request){
-    return $request->user();
-});
 
 
 // Tags routes
 Route::apiResource('tags', TagController::class);
 Route::get('SortByTag/{tag_id}', [TagController::class, 'SortByTag']);
+
+
+Route::middleware('auth','IsAdmin')->group(function () {
+    Route::get('users' , [UserController::class,'users']);
+    Route::put('switchrole/{id}' ,[UserController::class,'switchRole']);
+    Route::get('user/{id}', [UserController::class,'showOneUser']);
+});
