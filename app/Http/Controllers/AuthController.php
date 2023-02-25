@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered; 
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Auth\Events\Registered; 
-use App\Models\Role;
+
 class AuthController extends Controller
 {
     
@@ -18,11 +20,11 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' =>
-            [
-                'required',
-                Password::min(8)
-                    ->letters()
-            ],
+                [
+                    'required',
+                    // Password::min(8)
+                    //     ->letters()
+                ],
         ]);
         $user = User::where('email', $request->email)->first();
 
@@ -38,7 +40,15 @@ class AuthController extends Controller
                
             }
         }
-
+        // return response()->json(["api_token" => $user->email_verified_at]);
+        // send email
+        
+        if (!$user->email_verified_at) {
+            $user->sendConfirmationEmail();
+            throw ValidationException::withMessages([
+                'message' => ['we have emailed, Please check your email, to confirm your email address.']
+            ]);
+        }
         return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]); 
     }
 
