@@ -53,4 +53,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request){
 
 // Tags routes
 Route::apiResource('tags', TagController::class);
-Route::get('SortByTag/{tag_id}', [TagController::class, 'SortByTag']);
+Route::get('FilterByTag/{tag_id}', [TagController::class, 'FilterByTag']);

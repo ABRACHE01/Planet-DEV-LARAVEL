@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Events\Registered; 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
@@ -44,14 +44,14 @@ class AuthController extends Controller
         }
         // return response()->json(["api_token" => $user->email_verified_at]);
         // send email
-        
+
         if (!$user->email_verified_at) {
             $user->sendConfirmationEmail();
             throw ValidationException::withMessages([
                 'message' => ['we have emailed, Please check your email, to confirm your email address.']
             ]);
         }
-        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]); 
+        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]);
     }
 
     public function register(Request $request)
@@ -91,6 +91,7 @@ class AuthController extends Controller
           'message'=> 'confirmed successfully'
        ]) ;
     }
+
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->id);
@@ -105,6 +106,48 @@ class AuthController extends Controller
             event(new Verified($user));
         }
 
+    }
+
+    public function forgot(Request $request){
+        $exist = $request->validate([
+            'email' => 'required|email|exists:users'
+        ]);
+
+        if($exist){
+            $user = User::where('email', $request->email)->first();
+
+            if($user->email_verified_at == NULL){
+
+                $user->sendConfirmationEmail();
+
+                return response()->json([
+                    'Error' => 'Go verify your email'
+                ]);
+            }
+
+            $token = Str::random(64);
+
+            $insert = DB::table('password_resets')->insert([
+                'email' => $request->email,
+                'token' => $token,
+                'created_at' => Carbon::now()
+            ]);
+
+            if($insert){
+                Mail::send('email.reset', ['token'=> $token], function($message) use($request){
+                    $message->to($request->email);
+                    $message->subject('Reset your password');
+                });
+
+                return response()->json([
+                    'success' => 'we have emailed you with reset password link'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'Error' => 'Your email does not exist'
+            ]);
+        }
     }
 
     public function reset($token, Request $request){
