@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Events\Registered; 
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     
@@ -79,7 +80,6 @@ class AuthController extends Controller
           'message'=> 'confirmed succsefully'
        ]) ;
     }
-
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->id);
@@ -89,18 +89,15 @@ class AuthController extends Controller
                 'message'=> 'confirmed succsefully'
              ]) ;
         }
-    
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
-    
     }
-        
-
     public function reset(){
         
     }
     public function logout(){
-        
+        Auth::logout();
+        return response()->json(['success'=>'you have loged out']);
     }
 }

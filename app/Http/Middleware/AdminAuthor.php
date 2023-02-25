@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\Auth;
+
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class IsAuthor
+class AdminAuthor
 {
     /**
      * Handle an incoming request.
@@ -16,13 +17,12 @@ class IsAuthor
      */
     public function handle(Request $request, Closure $next)
     {
-        // return $next($request);
         if (!Auth::user()) {
             return response()->json([
                 'error' => 'unothontifed' ]);
             
         }
-        if (Auth::user()->role->name =='author') {
+        if (Auth::user()->role->name == 'admin' || Auth::user()->role->name == 'author' ) {
             return $next($request);
         } else {
             return response()->json([
