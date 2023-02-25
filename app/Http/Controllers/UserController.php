@@ -26,12 +26,7 @@ class UserController extends Controller
         $user->save();
         return  response()->json([
             'success'=>' Password edited successfully',
-            'user'=>[
-                'id'=> $user->id,
-                'name'=> $user->name,
-                'email'=> $user->email,
-                'role'=>$user->role->name,
-            ]]);
+            'user'=> new UserResource($user)]);
     }
     public function updateName(request $request){
         $request->validate([
@@ -42,12 +37,7 @@ class UserController extends Controller
         $user->save();
         return  response()->json([
             'success'=>' Name edited successfully',
-            'user'=>[
-                'id'=> $user->id,
-                'name'=> $user->name,
-                'email'=> $user->email,
-                'role'=>$user->role->name,
-        ]]);
+            'user'=> new UserResource($user)]);
     }
     public function updateEmail(request $request){
         $request->validate([
@@ -60,38 +50,36 @@ class UserController extends Controller
         $user->sendConfirmationEmail();
         return  response()->json([
             'success'=>' Email edited successfully',
-            'user'=>[
-                'id'=> $user->id,
-                'name'=> $user->name,
-                'email'=> $user->email,
-                'role'=>$user->role->name,
-        ]]);
+            'user'=> new UserResource($user)]);
     } 
     public function user(){
         $user = Auth::user();
-        return  response()->json([
-            'user'=>[
-                'id'=> $user->id,
-                'name'=> $user->name,
-                'email'=> $user->email,
-                'role'=>$user->role->name,
-        ]]);
+        return new UserResource($user);
     }
-    public function switchRole(User $user){
-        if($user->role->name="user"){
-            $user->role->name="author";
-            $user->update();
+    public function switchRole($id){
+        $user = User::find($id);
+        if($user->role->name=="user"){
+            $user->role_id =3;
+            $user->save();
         }
         else{
-            $user->role->name="user";
-            $user->update();
+            $user->role_id=1;
+            $user->save();
         }
+        $user = User::find($id);
+        return  response()->json([
+            'success'=>'switched to '.$user->role->name,
+            'user'=> new UserResource($user)
+        ]);
     }
     public function users(){
-        $users = User::where();
+        $users = User::whereDoesntHave('role', function($query) {
+            $query->where('name', 'admin');
+        })->get();
         return new UserCollection($users);
     }
-    public function showOneUser(User $user){
+    public function showOneUser($id){
+        $user = User::find($id);
         return new UserResource($user);
     }
 }
