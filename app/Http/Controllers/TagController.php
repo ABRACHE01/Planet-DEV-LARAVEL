@@ -11,12 +11,11 @@ use App\Http\Requests\UpdateTagRequest;
 class TagController extends Controller
 {
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    //     $this->middleware('IsAdmin')->except(['index','store','update','destroy','show']);
-    //     $this->middleware('IsAuthor');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+        $this->middleware('IsAdmin')->only(['index','store','update','destroy','show', 'SortByTag']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -113,7 +112,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function SortByTag($tag_id){
+    public function FilterByTag($tag_id){
 
         $tag = Tag::with('articles')->where('id', $tag_id)->first();
 
