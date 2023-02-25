@@ -22,11 +22,11 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' =>
-            [
-                'required',
-                Password::min(8)
-                    ->letters()
-            ],
+                [
+                    'required',
+                    // Password::min(8)
+                    //     ->letters()
+                ],
         ]);
         $user = User::where('email', $request->email)->first();
 
@@ -42,8 +42,16 @@ class AuthController extends Controller
 
             }
         }
-
-        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]);
+        // return response()->json(["api_token" => $user->email_verified_at]);
+        // send email
+        
+        if (!$user->email_verified_at) {
+            $user->sendConfirmationEmail();
+            throw ValidationException::withMessages([
+                'message' => ['we have emailed, Please check your email, to confirm your email address.']
+            ]);
+        }
+        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]); 
     }
 
     public function register(Request $request)

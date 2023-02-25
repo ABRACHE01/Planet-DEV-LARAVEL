@@ -12,8 +12,8 @@ class CommentController extends Controller
 
      public function __construct()
     {
-        $this->middleware('auth:sanctum');
-        $this->middleware('IsAdmin')->only(['index','update','destroy']);
+        $this->middleware('auth:sanctum')->except(['index','show']);
+        $this->middleware('IsAdmin')->only(['update','destroy']);
 
     }
     /**
@@ -37,7 +37,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        //ceate a new comment
+        //create a new comment
         $comment = new Comment();
         $comment->content = $request->input('content');
         $comment->user_id =
@@ -70,9 +70,9 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        // if (auth()->user()->id !== $comment->user_id) {
-        //     return response()->json(['error' => 'You are not authorized to update this comment'], 403);
-        // }
+        if (auth()->user()->id !== $comment->user_id) {
+            return response()->json(['error' => 'You are not authorized to update this comment'], 403);
+        }
         $comment->content = $request->input('content');
         $comment->save();
 
