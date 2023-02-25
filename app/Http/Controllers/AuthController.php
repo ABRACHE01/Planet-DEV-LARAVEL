@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Auth\Events\Registered; 
+use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(Request $request){
@@ -22,11 +22,11 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' =>
-            [
-                'required',
-                Password::min(8)
-                    ->letters()
-            ],
+                [
+                    'required',
+                    // Password::min(8)
+                    //     ->letters()
+                ],
         ]);
         $user = User::where('email', $request->email)->first();
 
@@ -42,8 +42,16 @@ class AuthController extends Controller
 
             }
         }
-
-        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]);
+        // return response()->json(["api_token" => $user->email_verified_at]);
+        // send email
+        
+        if (!$user->email_verified_at) {
+            $user->sendConfirmationEmail();
+            throw ValidationException::withMessages([
+                'message' => ['we have emailed, Please check your email, to confirm your email address.']
+            ]);
+        }
+        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]); 
     }
 
     public function register(Request $request)
