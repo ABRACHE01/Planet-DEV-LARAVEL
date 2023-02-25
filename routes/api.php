@@ -26,7 +26,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout')->middleware('auth');
     Route::post('forgot', 'forgot');
-    Route::post('reset/{token}', 'reset')->name('reset.password.post');
+    Route::put('reset/{token}', 'reset')->name('reset.password.post');
     Route::get('/email/verify/{id}/{hash}', 'verify')
     ->name('verification.verify');
 });
