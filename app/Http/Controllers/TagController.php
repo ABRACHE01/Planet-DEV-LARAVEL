@@ -112,7 +112,7 @@ class TagController extends Controller
         ]);
     }
 
-    public function SortByTag($tag_id){
+    public function FilterByTag($tag_id){
 
         $tag = Tag::with('articles')->where('id', $tag_id)->first();
 

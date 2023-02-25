@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Events\Registered; 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
@@ -44,14 +44,14 @@ class AuthController extends Controller
         }
         // return response()->json(["api_token" => $user->email_verified_at]);
         // send email
-        
+
         if (!$user->email_verified_at) {
             $user->sendConfirmationEmail();
             throw ValidationException::withMessages([
                 'message' => ['we have emailed, Please check your email, to confirm your email address.']
             ]);
         }
-        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]); 
+        return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]);
     }
 
     public function register(Request $request)
@@ -91,6 +91,7 @@ class AuthController extends Controller
           'message'=> 'confirmed successfully'
        ]) ;
     }
+    
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->id);
