@@ -121,7 +121,7 @@ class AuthController extends Controller
                 $user->sendConfirmationEmail();
 
                 return response()->json([
-                    'Error' => 'Go verify your email'
+                    'Error' => 'Go verify your email first, we emailed you with confirmation link'
                 ]);
             }
 
