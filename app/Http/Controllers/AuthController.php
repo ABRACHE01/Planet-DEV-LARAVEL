@@ -54,8 +54,7 @@ class AuthController extends Controller
         return response()->json(["api_token" => $user->createToken('api_token')->plainTextToken]);
     }
 
-    public function register(Request $request)
-    {
+    public function register(Request $request){
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
@@ -81,8 +80,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function confirmEmail($code)
-    {
+    public function confirmEmail($code){
         $user = User::where('confirmation_code', $code)->firstOrFail();
 
         $user->confirmEmail();
@@ -92,8 +90,7 @@ class AuthController extends Controller
        ]) ;
     }
 
-    public function verify(Request $request)
-    {
+    public function verify(Request $request){
         $user = User::findOrFail($request->id);
 
         if ($user->email_verified_at) {
@@ -105,7 +102,6 @@ class AuthController extends Controller
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
-
     }
 
     public function forgot(Request $request){
