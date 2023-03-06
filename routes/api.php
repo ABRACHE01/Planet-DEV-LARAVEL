@@ -24,7 +24,7 @@ use App\Http\Controllers\categoryController;
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
-    Route::post('logout', 'logout')->middleware('auth');
+    Route::post('logout', 'logout')->middleware('auth:sanctum');
     Route::post('forgot', 'forgot');
     Route::put('reset/{token}', 'reset')->name('reset.password.post');
     Route::get('/email/verify/{id}/{hash}', 'verify')
@@ -53,4 +53,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request){
 
 // Tags routes
 Route::apiResource('tags', TagController::class);
-Route::get('FilterByTag/{tag_id}', [TagController::class, 'FilterByTag']);
+Route::get('SortByTag/{tag_id}', [TagController::class, 'FilterByTag']);
